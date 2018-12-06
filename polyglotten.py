@@ -117,11 +117,53 @@ class Poly:
             os.system(cmd)
         os.system('find -name *.wav | cut -b 3- >> fname.txt')
         fname_out = swap('fname.txt', True).pop()
-
-
+        print "~ Prepping File "+fname_out+" For Spoofing ~"
+        # Get Data about the input wav being spoofed
         fs, data = wavfile.read(fname_out)
-        print fs.bit_length()
-        print len(data)
+        print "Bit Depth: " + str(fs.bit_length())
+        print "N Frames: " + str(len(data)) + " ["+str(fs.bit_length())+" Bits Each]"
+        print "File Size: " + str(float(len(data)*fs.bit_length()*2)/8000000) + " MB"
+        return fs, data
+
+    def injection_prep(self,src):
+        buffer_stuffer = {}
+        if src == '':
+            src = str(input('Enter path to file for obfuscation:\n'))
+        print "Inject Source: " + src
+        data = swap(src, False)
+        print src + " is " + str(len(data))+" lines"
+        frame = 0
+        for line in data:
+            if len(list(line)) > 3:
+                buffer = ''
+                for character in list(line):
+                    buffer += character
+                    if len(buffer) >= 3:
+                        buffer_stuffer[frame] = buffer
+                        buffer = ''
+            else:
+                buffer = ''
+                for element in list(line):
+                    buffer += element
+                buffer_stuffer[frame] = buffer_stuffer
+            frame += 1
+        print "* "+str(frame) + " Frames of text prepared for injecting"
+        return buffer_stuffer
+
+    def merge(self, musicdata, textdata, symbols, mapping):
+        fN = 0
+        dataIn = []
+        dataOut = []
+
+        # Now start inserting this data into the music data
+        print "("+str(len(textdata.keys()))+","+str(len(textdata[0]))+")"
+        print musicdata.shape
+        for index in textdata.keys():
+            bits = textdata[index]
+            for character in list(bits):
+                dataIn.append(character)
+        print len(dataIn)
+
 # ################################## POLY ################################## #
 
 
@@ -181,8 +223,13 @@ def main():
     ''' Start Building the Polyglot '''
     pglot = Poly(symbols, mapping, isVerbose)
     pglot.set_data_input_stream(target_file,'spoofed.mp3')
+    fin, pdata = pglot.check_source_file()
 
-    pglot.check_source_file()
+    # Our test data for inserting into the spoofed mp3 file
+    test_subject = 'PoCorGTFO_0x03.txt'
+    polydata = pglot.injection_prep(test_subject)
+
+    pglot.merge(pdata,polydata,symbols,mapping)
 
 
 if __name__ == '__main__':
