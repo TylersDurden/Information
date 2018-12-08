@@ -20,4 +20,4 @@ Polyglottony (Adj.) : The saturation of ones attention with the unpatchable myst
 ## Remotely 
 Experimenting with scripting to and from hosts. Using a raspberry pi [that I own!] for this. Example of getting root: 
 
-![rootIt](https://raw.githubusercontent.com/TylersDurden/Information/master/Remotely/root_me.png)
+[rootIt](https://raw.githubusercontent.com/TylersDurden/Information/master/Remotely/rootme.png)
