@@ -17,4 +17,7 @@ towards accelerating program speed! Couldn't the Polyglot instead be used for ef
 
 Polyglottony (Adj.) : The saturation of ones attention with the unpatchable mystery of the Polyglot File. 
 
-  
+## Remotely 
+Experimenting with scripting to and from hosts. Using a raspberry pi [that I own!] for this. Example of getting root: 
+
+![rootIt](https://raw.githubusercontent.com/TylersDurden/Information/master/Remotely/root_me.png)
